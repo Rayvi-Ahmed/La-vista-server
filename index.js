@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require("express")
 const app = express()
 const cors = require('cors')
 require('dotenv').config()
@@ -35,6 +35,7 @@ async function run() {
 
         const menuCollection = client.db('VistaDb').collection("Menu")
         const reviewCollection = client.db('VistaDb').collection("Review")
+        const cartsCollection = client.db('VistaDb').collection("Carts")
 
         app.get('/menu', async (req, res) => {
             const result = await menuCollection.find().toArray()
@@ -43,6 +44,23 @@ async function run() {
 
         app.get('/review', async (req, res) => {
             const result = await reviewCollection.find().toArray()
+            res.send(result)
+        })
+
+        app.get('/carts', async (req, res) => {
+            const email = req.query.email
+            if (!email) {
+                res.send([])
+            }
+            const query = { email: email }
+            const result = await cartsCollection.find(query).toArray()
+            res.send(result)
+
+        })
+
+        app.post('/carts', async (req, res) => {
+            const item = req.body
+            const result = await cartsCollection.insertOne(item)
             res.send(result)
         })
 
