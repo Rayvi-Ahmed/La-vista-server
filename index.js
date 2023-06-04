@@ -12,7 +12,8 @@ app.use(cors())
 app.use(express.json())
 
 const verifyJwt = (req, res, next) => {
-    const authorization = req.headers.authorized;
+    const authorization = req.headers.authorization;
+
     if (!authorization) {
         return res.status(401).send({ error: true, massage: 'Unauthorised user !' })
     }
